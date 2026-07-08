@@ -920,7 +920,7 @@
             <textarea id="mensagem" name="mensagem" placeholder="Descreva brevemente sua questão jurídica" required></textarea>
           </div>
           <div class="robot-check">
-            <div class="g-recaptcha" data-sitekey="SUA_SITE_KEY_AQUI"></div>
+           <div class="g-recaptcha" data-sitekey="6LdCU0otAAAAANmFs4itUBNHbZiEDOCYTQdZVISp"></div>
           </div>
           <p id="recaptchaError" style="color:#e35b5b;font-size:0.85rem;display:none;margin:-16px 0 16px;">Confirme que você não é um robô antes de enviar.</p>
           <button type="submit" class="btn btn-gold btn-lg" style="width:100%;justify-content:center;">Enviar mensagem</button>
