@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://marcosrodriguesadvmr.onrender.com/sitemap.xml
+Sitemap: https://marcosrodrigues-advmr.onrender.com/sitemap.xml
