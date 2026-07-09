@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://marcosrodrigues-advmr.onrender.com/sitemap.xml
