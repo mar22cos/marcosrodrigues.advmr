@@ -42,6 +42,7 @@
     color:var(--gold-2);
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:14px;
   }
   .eyebrow::before,.eyebrow::after{
@@ -51,6 +52,7 @@
     background:linear-gradient(90deg, transparent, var(--gold-1));
   }
   .eyebrow::after{background:linear-gradient(90deg, var(--gold-1), transparent);}
+  .eyebrow.left{justify-content:flex-start;}
   .eyebrow.left::before,.eyebrow.left::after{display:none;}
 
   h1,h2,h3{
@@ -551,28 +553,7 @@
     display:flex;
     align-items:center;
     gap:14px;
-    background:rgba(244,239,226,0.04);
-    border:1px solid var(--line);
-    padding:14px 18px;
-    margin:22px 0 26px;
-    max-width:280px;
-  }
-  .robot-check input[type="checkbox"]{
-    width:22px;height:22px;
-    accent-color:var(--gold-2);
-    cursor:pointer;
-    flex:none;
-  }
-  .robot-check label{
-    font-family:'Jost',sans-serif;
-    font-size:0.86rem;
-    color:var(--cream);
-    cursor:pointer;
-  }
-  .robot-check .badge{
-    margin-left:auto;
-    width:30px;height:30px;
-    opacity:0.5;
+    margin:22px 0 10px;
   }
 
   .info-card{
@@ -902,7 +883,6 @@
           <a href="#contato">Falar sobre o assunto →</a>
         </div>
       </div>
-      <p class="artigos-note">* Textos de exemplo — substitua pelos artigos reais do escritório à medida que forem publicados.</p>
     </div>
   </section>
 
@@ -924,7 +904,7 @@
       </div>
 
       <div class="contato-grid">
-        <form class="contact-form" onsubmit="return false;">
+        <form class="contact-form" id="contactForm">
           <h3>Envie sua mensagem</h3>
           <div class="form-group">
             <label for="nome">Nome</label>
@@ -939,10 +919,9 @@
             <textarea id="mensagem" name="mensagem" placeholder="Descreva brevemente sua questão jurídica" required></textarea>
           </div>
           <div class="robot-check">
-            <input type="checkbox" id="naoSouRobo" name="naoSouRobo" required>
-            <label for="naoSouRobo">Não sou um robô</label>
-            <svg class="badge" viewBox="0 0 24 24" fill="none" stroke="#e3c481" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12l3 3 5-6"/></svg>
+            <div class="g-recaptcha" data-sitekey="6LdCU0otAAAAANmFs4itUBNHbZiEDOCYTQdZVISp"></div>
           </div>
+          <p id="recaptchaError" style="color:#e35b5b;font-size:0.85rem;display:none;margin:-16px 0 16px;">Confirme que você não é um robô antes de enviar.</p>
           <button type="submit" class="btn btn-gold btn-lg" style="width:100%;justify-content:center;">Enviar mensagem</button>
         </form>
 
@@ -1026,7 +1005,6 @@
     </div>
     <div class="bottom-bar">
       <span>© 2026 Marcos Rodrigues Advocacia e Consultoria Jurídica. Todos os direitos reservados.</span>
-      <span>OAB/CE 56899</span>
     </div>
   </div>
 </footer>
@@ -1046,6 +1024,26 @@
       a.addEventListener('click', () => mobileLinks.classList.remove('open'));
     });
   }
+
+  // ---------- reCAPTCHA + envio do formulário ----------
+  const contactForm = document.getElementById('contactForm');
+  const recaptchaError = document.getElementById('recaptchaError');
+  if(contactForm){
+    contactForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      const resposta = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : '';
+      if(!resposta){
+        recaptchaError.style.display = 'block';
+        return;
+      }
+      recaptchaError.style.display = 'none';
+      // TODO: aqui entra o envio real da mensagem (ex.: Web3Forms, Formspree ou EmailJS)
+      alert('Mensagem validada! Falta conectar o formulário a um serviço de envio de e-mail.');
+      contactForm.reset();
+      if(typeof grecaptcha !== 'undefined') grecaptcha.reset();
+    });
+  }
 </script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
