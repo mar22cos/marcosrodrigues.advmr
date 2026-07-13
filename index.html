@@ -905,9 +905,7 @@
 
       <div class="contato-grid">
         <form class="contact-form" id="contactForm">
-          <input type="hidden" name="access_key" value="83273434-42d2-4c70-8757-61d0cc1ade27">
-          <input type="hidden" name="subject" value="Novo contato pelo site — Marcos Rodrigues Advocacia">
-          <input type="checkbox" name="botcheck" style="display:none">
+          <input type="hidden" name="_subject" value="Novo contato pelo site — Marcos Rodrigues Advocacia">
           <h3>Envie sua mensagem</h3>
           <div class="form-group">
             <label for="nome">Nome</label>
@@ -1051,14 +1049,13 @@
 
       const formData = new FormData(contactForm);
 
-      fetch('https://api.web3forms.com/submit', {
+      fetch('https://formspree.io/f/mrengjbv', {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
         body: formData
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.success){
+      .then(res => {
+        if(res.ok){
           formStatus.textContent = 'Mensagem enviada com sucesso! Em breve entraremos em contato.';
           formStatus.style.color = '#4caf7d';
           contactForm.reset();
