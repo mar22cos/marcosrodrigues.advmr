@@ -905,6 +905,9 @@
 
       <div class="contato-grid">
         <form class="contact-form" id="contactForm">
+          <input type="hidden" name="access_key" value="83273434-42d2-4c70-8757-61d0cc1ade27">
+          <input type="hidden" name="subject" value="Novo contato pelo site — Marcos Rodrigues Advocacia">
+          <input type="checkbox" name="botcheck" style="display:none">
           <h3>Envie sua mensagem</h3>
           <div class="form-group">
             <label for="nome">Nome</label>
@@ -922,7 +925,8 @@
             <div class="g-recaptcha" data-sitekey="6Lea-FEtAAAAAFOBdXrq-klxJ488-8j1Vyb6vppe"></div>
           </div>
           <p id="recaptchaError" style="color:#e35b5b;font-size:0.85rem;display:none;margin:-16px 0 16px;">Confirme que você não é um robô antes de enviar.</p>
-          <button type="submit" class="btn btn-gold btn-lg" style="width:100%;justify-content:center;">Enviar mensagem</button>
+          <button type="submit" id="submitBtn" class="btn btn-gold btn-lg" style="width:100%;justify-content:center;">Enviar mensagem</button>
+          <p id="formStatus" style="font-size:0.9rem;margin-top:12px;display:none;"></p>
         </form>
 
         <div class="info-card">
@@ -1028,6 +1032,9 @@
   // ---------- reCAPTCHA + envio do formulário ----------
   const contactForm = document.getElementById('contactForm');
   const recaptchaError = document.getElementById('recaptchaError');
+  const formStatus = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
   if(contactForm){
     contactForm.addEventListener('submit', function(e){
       e.preventDefault();
@@ -1037,10 +1044,40 @@
         return;
       }
       recaptchaError.style.display = 'none';
-      // TODO: aqui entra o envio real da mensagem (ex.: Web3Forms, Formspree ou EmailJS)
-      alert('Mensagem validada! Falta conectar o formulário a um serviço de envio de e-mail.');
-      contactForm.reset();
-      if(typeof grecaptcha !== 'undefined') grecaptcha.reset();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+      formStatus.style.display = 'none';
+
+      const formData = new FormData(contactForm);
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.success){
+          formStatus.textContent = 'Mensagem enviada com sucesso! Em breve entraremos em contato.';
+          formStatus.style.color = '#4caf7d';
+          contactForm.reset();
+          if(typeof grecaptcha !== 'undefined') grecaptcha.reset();
+        } else {
+          formStatus.textContent = 'Não foi possível enviar. Tente novamente ou fale pelo WhatsApp.';
+          formStatus.style.color = '#e35b5b';
+        }
+        formStatus.style.display = 'block';
+      })
+      .catch(() => {
+        formStatus.textContent = 'Erro de conexão. Tente novamente ou fale pelo WhatsApp.';
+        formStatus.style.color = '#e35b5b';
+        formStatus.style.display = 'block';
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar mensagem';
+      });
     });
   }
 </script>
